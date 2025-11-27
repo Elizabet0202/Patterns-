@@ -1,0 +1,40 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+    name: IBank Auth
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 11
+          cache: gradle
+
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Install ChromeDriver
+        uses: nanasess/setup-chromedriver@v2
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Run SUT
+        run: |
+          java -jar ./artifacts/app-ibank.jar -P:profile=test &
+          sleep 5
+
+      - name: Run AuthTest
+        run: xvfb-run ./gradlew test --tests ru.netology.test.AuthTest -Dselenide.headless=true
+
