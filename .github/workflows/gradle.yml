@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-
+   ibank-auth:
     name: IBank Auth
     runs-on: ubuntu-latest
 
