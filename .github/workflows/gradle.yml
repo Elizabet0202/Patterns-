@@ -21,20 +21,13 @@ jobs:
           java-version: 11
           cache: gradle
 
-      - name: Install Chrome
-        uses: browser-actions/setup-chrome@v1
-
-      - name: Install ChromeDriver
-        uses: nanasess/setup-chromedriver@v2
-
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       - name: Run SUT
         run: |
           java -jar ./artifacts/app-ibank.jar -P:profile=test &
-          sleep 5
 
       - name: Run AuthTest
-        run: xvfb-run ./gradlew test --tests ru.netology.test.AuthTest -Dselenide.headless=true
+        run: ./gradlew test --tests ru.netology.test.AuthTest -Dselenide.headless=true
 
